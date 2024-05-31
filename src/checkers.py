@@ -54,6 +54,11 @@ def check_row(index, row):
 
         # Check the website
         status, found_anchor_text, correct_link, rel_attributes, outgoing_links, indexed = main(row['URL'], row['To URL'], row['Ankartext'])
+
+        # If status is not 200, set correct_link to "Not Found"
+        if status != 200:
+            correct_link = "Not Found"
+
     except MissingInformationError as e:
         # Log the error and set the return values to "Not Checked"
         logging.error(f"An error occurred while checking the DataFrame: {e}")

@@ -103,14 +103,17 @@ def check_anchor_text(soup, anchor, to_url, url):
             absolute_url_normalized = absolute_url_parsed.netloc.replace('www.', '') + absolute_url_parsed.path.rstrip('/')
             # Update the last URL checked
             last_url_checked = absolute_url
-
+            
             # If the normalized absolute URL matches the normalized target URL, the correct link has been found
             if absolute_url_normalized == to_url_normalized:
                 correct_link = "Correct"
                 found_to_url = True
-            # If the correct link hasn't been found yet and the absolute URL is on a different domain than the root URL, update the correct link
-            elif correct_link == "None" and urlparse(absolute_url).netloc != root_url:
+            # If the correct link hasn't been found yet and the absolute URL is on the same domain as the to_url but not the same path, update the correct link
+            elif correct_link is None and urlparse(absolute_url).netloc == urlparse(to_url).netloc and urlparse(absolute_url).path != urlparse(to_url).path:
                 correct_link = absolute_url
+            # If the correct link hasn't been found yet and the absolute URL is on a different domain than the to_url, update the correct link
+            elif correct_link is None and urlparse(absolute_url).netloc != urlparse(to_url).netloc:
+                correct_link = "Not Found"
 
             # Get the rel attributes of the link
             rel_attributes = link.get('rel')
