@@ -5,6 +5,7 @@ import gspread
 import logging
 import string
 import pandas as pd
+import gspread_dataframe as gd
 from concurrent.futures import ThreadPoolExecutor
 from threading import Lock
 from src.checkers import check_row, safe_check_row
@@ -47,10 +48,10 @@ with ThreadPoolExecutor(max_workers=5) as executor:
 
 # Assign the results to the new columns
 for i, result in enumerate(results):
-    index, live_status, found_anchor_text, correct_link, rel_attributes, outgoing_links, indexed = result
+    index, status, found_anchor_text, correct_link, rel_attributes, outgoing_links, indexed = result
 
     with lock:
-        df.at[i, "Updated Status"] = live_status
+        df.at[i, "Updated Status"] = status
         df.at[i, "Anchor Text"] = found_anchor_text
         df.at[i, "Correct Link"] = correct_link
         df.at[i, "Indexed"] = indexed
@@ -58,7 +59,9 @@ for i, result in enumerate(results):
         df.at[i, "Outgoing Links"] = outgoing_links
         df.at[i, "Last Time Refreshed"] = datetime.now().strftime("%Y-%m-%d %H:%M")
 
-    print(live_status, found_anchor_text, correct_link, indexed, rel_attributes, outgoing_links, datetime.now().strftime("%Y-%m-%d %H:%M"))
+    print(status, found_anchor_text, correct_link, indexed, rel_attributes, outgoing_links, datetime.now().strftime("%Y-%m-%d %H:%M"))
+
+gd.set_with_dataframe(sheet, df)
     
 # Convert the DataFrame back to a list of lists and add the headers
 new_data = [df.columns.tolist()] + df.values.tolist()

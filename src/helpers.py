@@ -18,16 +18,14 @@ def check_link_live(url, headers):
     try:
         # Send a GET request to the URL
         response = requests.get(url, timeout=10, headers=headers)
-        # If the HTTP status code is not in the 200-299 range, the URL is not live
-        if not 200 <= response.status_code < 300:
-            print(f"HTTP status code: {response.status_code}")
-            return False
+        # If the status code is 508 but the response content is not empty, treat it as a success
+        if response.status_code == 508 and response.content:
+            return 200
+        # Otherwise, return the HTTP status code
+        return response.status_code
     except requests.exceptions.RequestException as e:
-        # If a request exception occurs, print the error and return it
-        print(f"Error: {e}")
-        return str(e)
-    # If no exceptions occurred and the status code is in the 200-299 range, the URL is live
-    return True
+        # If a request exception occurs, return a default status code or the error message
+        return 0  # or return str(e)
 
 # Function to get the page source using Selenium
 def get_page_source(url):

@@ -27,8 +27,6 @@ def main(url, to_url, anchor):
 
     # Check if the link is live
     status = check_link_live(url, headers)
-    if status != True:
-        return status, "Not Found", "Not Found", "Not Found", "Not Found", 0
 
     # Get the page source
     page_source = get_page_source(url)
@@ -45,7 +43,7 @@ def main(url, to_url, anchor):
     # Check if the page is indexed by Google
     indexed = check_google_index(url, headers)
 
-    return "Live", found_anchor_text, correct_link, rel_attributes, outgoing_links, indexed
+    return status, found_anchor_text, correct_link, rel_attributes, outgoing_links, indexed
 
 # Function to check a single row of the DataFrame
 def check_row(index, row):
@@ -55,17 +53,17 @@ def check_row(index, row):
             raise MissingInformationError("Missing Information")
 
         # Check the website
-        live_status, found_anchor_text, correct_link, rel_attributes, outgoing_links, indexed = main(row['URL'], row['To URL'], row['Ankartext'])
+        status, found_anchor_text, correct_link, rel_attributes, outgoing_links, indexed = main(row['URL'], row['To URL'], row['Ankartext'])
     except MissingInformationError as e:
         # Log the error and set the return values to "Not Checked"
         logging.error(f"An error occurred while checking the DataFrame: {e}")
-        live_status, found_anchor_text, correct_link, rel_attributes, outgoing_links, indexed = "Not Checked", "Not Checked", "Not Checked", "Not Checked", "Not Checked", 0
+        status, found_anchor_text, correct_link, rel_attributes, outgoing_links, indexed = "Not Checked", "Not Checked", "Not Checked", "Not Checked", "Not Checked", 0
     except Exception as e:
         # Log the error and set the return values to "Error"
         logging.error(f"An unexpected error occurred while checking the DataFrame: {e}")
-        live_status, found_anchor_text, correct_link, rel_attributes, outgoing_links, indexed = "Error", "Error", "Error", "Error", "Error", 0
+        status, found_anchor_text, correct_link, rel_attributes, outgoing_links, indexed = "Error", "Error", "Error", "Error", "Error", 0
 
-    return index, live_status, found_anchor_text, correct_link, rel_attributes, outgoing_links, indexed
+    return index, status, found_anchor_text, correct_link, rel_attributes, outgoing_links, indexed
 
 # Function to safely check a single row of the DataFrame
 def safe_check_row(index, row):

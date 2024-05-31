@@ -11,6 +11,7 @@ def format_cells(sheet, df):
     # Apply formatting to the cells
     green_format = CellFormat(backgroundColor=Color(0.5647, 0.9333, 0.5647))
     red_format = CellFormat(backgroundColor=Color(1, 0.4, 0.4))
+    yellow_format = CellFormat(backgroundColor=Color(1, 1, 0.4))
     bold_format = CellFormat(textFormat=TextFormat(bold=True))
 
     # Get the letter of the last column
@@ -24,17 +25,20 @@ def format_cells(sheet, df):
     anchor_text_index = df.columns.get_loc("Anchor Text")
 
     # Apply the formatting to the cells
-    for i, row in enumerate(df.values, start=2):  # Use df.values to get the rows as lists
+    for i, row in enumerate(df.values, start=2):
         # Format the "Updated Status" column
-        if row[status_index] == "Live":
+        status_code = int(row[status_index])
+        if 200 <= status_code < 300:
             fmt = green_format
         else:
             fmt = red_format
         format_cell_range(sheet, f"{column_number_to_letter(status_index+1)}{i}", fmt)
 
         # Format the "Anchor Text" column
-        if row[anchor_text_index] != "Not Found":
+        anchor_text = row[anchor_text_index]
+        if anchor_text.lower() == anchor.lower():
             fmt = green_format
+        elif anchor.lower() in anchor_text.lower():
+            fmt = yellow_format
         else:
             fmt = red_format
-        format_cell_range(sheet, f"{column_number_to_letter(anchor_text_index+1)}{i}", fmt)
