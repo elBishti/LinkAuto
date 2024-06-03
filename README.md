@@ -1,6 +1,6 @@
 # Camjo Link & Anchor Automation
 
-This script automates the process of checking the presence of specific links and anchor texts on a list of webpages. It reads a CSV file containing the URLs of the webpages to check, and adds a new column to the CSV file with the results of the check. The results can be "Found ALL", "Found URL", or "Not Found".
+This script automates the process of checking the presence of specific links and anchor texts on a list of webpages. It reads a CSV file containing the URLs of the webpages to check, and adds a new column to the CSV file with the results of the check. The results can be "Found ALL", "Found URL", or "Not Found"
 
 ## Installation
 
