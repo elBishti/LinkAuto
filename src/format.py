@@ -32,7 +32,11 @@ def format_cells(sheet, df):
     # Apply the formatting to the cells
     for i, row in enumerate(df.values, start=2):
         # Format the "Updated Status" column
-        status_code = int(row[status_index])
+        try:
+            status_code = int(row[status_index])
+        except ValueError:
+            print(f"Cannot convert {row[status_index]} to an integer.")
+            continue        
         if 200 <= status_code < 300:
             fmt = green_format
         else:
