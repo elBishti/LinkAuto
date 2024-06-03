@@ -58,7 +58,7 @@ def check_anchor_text(soup, anchor, to_url, url):
         last_url_checked = None
         outgoing_links = 0
         # Initialize variables to keep track of the correct link and its rel attributes
-        correct_link = "None"
+        correct_link = None
         rel_attributes = "Not Found"
 
         # Parse the root URL and the target URL
@@ -101,22 +101,23 @@ def check_anchor_text(soup, anchor, to_url, url):
             # Normalize the absolute URL by removing 'www.' and trailing slashes
             absolute_url_parsed = urlparse(absolute_url)
             absolute_url_normalized = absolute_url_parsed.netloc.replace('www.', '') + absolute_url_parsed.path.rstrip('/')
-            # Update the last URL checked
-            last_url_checked = absolute_url
             
             # If the normalized absolute URL matches the normalized target URL, the correct link has been found
             if absolute_url_normalized == to_url_normalized:
-                correct_link = "Correct"
+                correct_link = "Found"
                 found_to_url = True
+
             # If the correct link hasn't been found yet and the absolute URL is on the same domain as the to_url but not the same path, update the correct link
             elif correct_link is None and urlparse(absolute_url).netloc == urlparse(to_url).netloc and urlparse(absolute_url).path != urlparse(to_url).path:
                 correct_link = absolute_url
+
             # If the correct link hasn't been found yet and the absolute URL is on a different domain than the to_url, update the correct link
             elif correct_link is None and urlparse(absolute_url).netloc != urlparse(to_url).netloc:
                 correct_link = "Not Found"
 
             # Get the rel attributes of the link
             rel_attributes = link.get('rel')
+
             # If the rel attributes are None, set them to "None"
             if rel_attributes is None:
                 rel_attributes = "None"
@@ -129,8 +130,8 @@ def check_anchor_text(soup, anchor, to_url, url):
                 outgoing_links += 1
 
         # If the target URL wasn't found, set the correct link to the last URL checked
-        if not found_to_url:
-            correct_link = last_url_checked
+        if correct_link is None:
+            correct_link = "Not Found"
 
         # Return the results
         return found_anchor, found_anchor_text, correct_link, rel_attributes, outgoing_links

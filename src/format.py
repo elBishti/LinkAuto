@@ -26,6 +26,8 @@ def format_cells(sheet, df):
     ankar_text_index = df.columns.get_loc("Ankartext")
     to_url_index = df.columns.get_loc("To URL")
     correct_to_url_index = df.columns.get_loc("Correct Link")
+    indexed_index = df.columns.get_loc("Indexed")
+    rel_attributes_index = df.columns.get_loc("Rel Attributes")
 
     # Apply the formatting to the cells
     for i, row in enumerate(df.values, start=2):
@@ -54,10 +56,26 @@ def format_cells(sheet, df):
 
         # Format the "To URL" column
         correct_to_url = row[correct_to_url_index].strip() if row[correct_to_url_index] is not None else ""
-        if correct_to_url == "Correct":
+        if correct_to_url == "Found":
             fmt = green_format
         elif correct_to_url.startswith("http"):
             fmt = yellow_format
         else:
             fmt = red_format
         format_cell_range(sheet, f"{column_number_to_letter(correct_to_url_index+1)}{i}", fmt)
+
+        # Format the "Indexed" column
+        indexed = row[indexed_index]
+        if indexed == "Indexed":
+            fmt = green_format
+        else:
+            fmt = red_format
+        format_cell_range(sheet, f"{column_number_to_letter(indexed_index+1)}{i}", fmt)
+            
+        # Format the "Rel Attributes" column
+        rel_attributes = row[rel_attributes_index].strip()
+        if rel_attributes == "nofollow" or rel_attributes == "Not Found":
+            fmt = red_format
+        else:
+            fmt = green_format
+        format_cell_range(sheet, f"{column_number_to_letter(rel_attributes_index+1)}{i}", fmt)
