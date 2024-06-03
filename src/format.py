@@ -17,6 +17,10 @@ def format_cells(sheet, df):
     # Get the letter of the last column
     last_column_letter = column_number_to_letter(len(df.columns))
 
+    # Create a list to store the requests
+    requests = []
+
+
     # Format the headers
     format_cell_range(sheet, f"A1:{last_column_letter}1", bold_format)
 
@@ -83,3 +87,24 @@ def format_cells(sheet, df):
         else:
             fmt = green_format
         format_cell_range(sheet, f"{column_number_to_letter(rel_attributes_index+1)}{i}", fmt)
+
+
+    for column_index in [status_index, anchor_text_index, correct_to_url_index, indexed_index, rel_attributes_index]:
+        requests.append({
+            "repeatCell": {
+                "range": {
+                    "sheetId": sheet.id,
+                    "startRowIndex": i - 1,
+                    "endRowIndex": i,
+                    "startColumnIndex": column_index,
+                    "endColumnIndex": column_index + 1
+                },
+                "cell": {
+                    "userEnteredFormat": fmt
+                },
+                "fields": "userEnteredFormat(backgroundColor)"
+            }
+        })
+
+    # Send the batch update
+    sheet.spreadsheet.batch_update({"requests": requests})

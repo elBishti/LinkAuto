@@ -20,6 +20,9 @@ pip install pandas selenium webdriver-manager beautifulsoup4 re oauth2client
 ```
 
 ## Usage
+First you need to get a Google Sheets API and add it to the code, thereafter you will need to get credentials.json and add to a new folder called config,
+You will also have to share the sheets with the email you get from your Google Sheets API,
+
 Prepare your data: Add you google sheets name to the code in app.py. The sheet should contain a URL Column, An Ankartext Column & a To URL column.
 
 The script uses Selenium, and this script specifically uses google chrome so make sure you have it downloaded.

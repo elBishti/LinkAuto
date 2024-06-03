@@ -151,9 +151,9 @@ def check_google_index(url, headers):
         # If the URL is found in the response text, it means that the URL is indexed by Google
         if url in response.text:
             return "Indexed"
+        else:
+            return "Not Indexed"
     except Exception as e:
         # If an exception occurs (e.g., a network error), log the error and return "Not Checked"
         logging.error(f"An error occurred while checking if the link is indexed on Google: {e}")
         return "Not Checked"
-    # If the URL is not found in the response text, it means that the URL is not indexed by Google
-    return "Not Indexed"
