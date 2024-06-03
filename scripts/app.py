@@ -28,6 +28,7 @@ creds = ServiceAccountCredentials.from_json_keyfile_name(creds_path, scope)
 client = gspread.authorize(creds)
 
 # Open the Google SpreadSheet and get first sheet
+# Change your spreadsheet name here
 spreadsheet = client.open('test2')
 sheet = spreadsheet.sheet1
 
