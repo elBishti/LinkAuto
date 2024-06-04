@@ -21,6 +21,7 @@ logging.warning('This will get logged to a file')
 # Create a lock
 lock = Lock()
 
+### Insert your google sheets API credentials here
 # Use the credential.json to authenticate the Google Sheets API
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 creds_path = os.path.join(os.path.dirname(__file__), '../config/credentials.json')
